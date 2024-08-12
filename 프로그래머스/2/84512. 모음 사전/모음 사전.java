@@ -1,35 +1,27 @@
 import java.util.*;
 
 class Solution {
-    static char[] alphaList={'A','E','I','O','U'};
-    static ArrayList<String> dictionary;
-    
+    static char[] alpha = {'A', 'E', 'I', 'O', 'U'}; 
+    static List<String> list;
+
     public int solution(String word) {
-        int answer = 0;
-        dictionary = new ArrayList<>();
-        
-        //모든 사전을 돌려서 저장 
-        dfs("");
-        for (int i=0; i<dictionary.size(); i++){
-            if(dictionary.get(i).equals(word)) return answer;
-            answer++;
-        }
-        
-        
-        return answer;
+        list = new ArrayList<>();
+        String str = "";
+
+        dfs("", 0);
+        return list.indexOf(word);
     }
-    
-    
-    //사전 저장을 위한 dfs
-    public void dfs (String alpha){
+
+    public void dfs(String str, int cnt) {
         
-        dictionary.add(alpha);
+        list.add(str);  // 현재의 str을 리스트에 추가
         
-        if (alpha.length() == 5) return;
-        
-        for (int i=0; i<5; i++){
-            dfs(alpha+alphaList[i]);
+        if (cnt == 5) { // 종료 조건: 길이가 5 이상인 경우
+            return; 
         }
         
+        for (int i = 0; i < 5; i++) {
+            dfs(str + alpha[i], cnt + 1);  // str에 알파벳을 하나 추가한 상태로 재귀 호출
+        }
     }
 }
