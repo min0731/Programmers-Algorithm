@@ -1,67 +1,45 @@
-import java.util.HashSet;
+import java.util.*;
 
 class Solution {
     public int solution(String dirs) {
-        // 이동한 경로를 저장할 HashSet
-        HashSet<String> visitedPaths = new HashSet<>();
-        
-        // 현재 위치
-        int x = 0, y = 0;
-        
-        // 방향에 따른 위치 변화량
-        int[][] directions = {
-            {0, 1},  // U: 위쪽으로 이동
-            {0, -1}, // D: 아래쪽으로 이동
-            {1, 0},  // R: 오른쪽으로 이동
-            {-1, 0}  // L: 왼쪽으로 이동
-        };
-        
-        // 방향 문자와 인덱스 매핑
-        char[] directionChars = {'U', 'D', 'R', 'L'};
-        
-        // 명령어 처리
+        int answer = 0;
+        Set<String> visited = new HashSet<>();
+        int y = 5, x = 5; // 0 ~ 10 이라고 가정
+        int ny =5, nx =5;
+
         for (char dir : dirs.toCharArray()) {
-            int dirIndex = -1;
-            
-            // 현재 방향 문자에 맞는 인덱스를 찾음
-            for (int i = 0; i < directionChars.length; i++) {
-                if (dir == directionChars[i]) {
-                    dirIndex = i;
-                    break;
-                }
+
+            // 이동할 방향에 따라 새로운 좌표를 계산
+            if (dir == 'U') {
+                if (ny -1  > -1) ny = y - 1;
+                else continue;
+            } else if (dir == 'D') {
+                if (ny+1 < 11) ny = y + 1;
+                else continue;
+            } else if (dir == 'R') {
+                if (nx+1 < 11) nx = x + 1;
+                else continue;
+            } else if (dir == 'L') {
+                if (nx-1 > -1) nx = x - 1;
+                else continue;
             }
-            
-            if (dirIndex == -1) continue; // 유효하지 않은 방향이면 무시
-            
-            // 새로운 위치 계산
-            int newX = x + directions[dirIndex][0];
-            int newY = y + directions[dirIndex][1];
-            
-            // 경계 검사
-            if (newX < -5 || newX > 5 || newY < -5 || newY > 5) {
-                continue; // 격자판을 벗어나면 무시
+
+            // 이동 경로를 문자열로 표현(양방향)
+            String path1 = y + "," + x + "->" + ny + "," + nx;
+            String path2 = ny + "," + nx + "->" + y + "," + x;
+
+            // 경로가 처음 방문한 경우에만 카운트
+            if (!visited.contains(path1) && !visited.contains(path2)) {
+                visited.add(path1);
+                visited.add(path2);
+                answer++;
             }
-            
-            // 이동한 구간을 문자열로 기록
-            String pathFrom = x + "," + y;
-            String pathTo = newX + "," + newY;
-            
-            // 구간을 양방향으로 기록 (중복 방지)
-            if (!pathFrom.equals(pathTo)) {
-                String forwardPath = pathFrom + "->" + pathTo;
-                String backwardPath = pathTo + "->" + pathFrom;
-                
-                if (!visitedPaths.contains(forwardPath) && !visitedPaths.contains(backwardPath)) {
-                    visitedPaths.add(forwardPath);
-                }
-            }
-            
-            // 위치 업데이트
-            x = newX;
-            y = newY;
+
+            // 현재 위치를 업데이트
+            y = ny;
+            x = nx;
         }
-        
-        // 처음 걸어본 길의 총 길이 반환
-        return visitedPaths.size();
+
+        return answer;
     }
 }
