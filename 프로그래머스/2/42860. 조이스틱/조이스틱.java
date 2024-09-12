@@ -2,30 +2,27 @@ import java.util.*;
 
 class Solution {
     public int solution(String name) {
-        int upDown = 0;
-        int length = name.length();
+        int answer = 0;
+        int rightLeft = name.length()-1;
+        int upDown =0;
+        int plusA =0;
         
-        // 상하 이동 계산
-        for (int i = 0; i < length; i++) {
+        /* 상하만 */
+        for (int i=0; i<name.length(); i++){
             char c = name.charAt(i);
-            upDown += Math.min(c - 'A', 'Z' - c + 1);
+            //A에서 이동 vs Z에서 이동
+            upDown += Math.min(c -'A', 'Z'-c+1);
         }
-        
-        // 좌우 이동 계산
-        int rightLeft = length - 1;  // 기본적으로 오른쪽으로 끝까지 가는 경우
-         
-        for (int i = 0; i < length; i++) {
-            int numA = i + 1;
-            // 연속된 'A' 구간을 건너뛰기 위한 로직
-            while (numA < length && name.charAt(numA) == 'A') {
-                numA++;
+        /* 좌우만(A가 연속으로 있을 때를 고려) */
+        for (int i=0; i< name.length(); i++){
+            plusA = i+1;
+            
+            while(plusA < name.length() &&name.charAt(plusA) == 'A'){
+                plusA++;
             }
-            // i는 현재 위치, numA는 'A'가 끝나는 위치
-            // 좌우 이동의 최소값을 계산: 앞에서 돌아가는 경우와 끝까지 가는 경우 비교
-            rightLeft = Math.min(rightLeft, i + length - numA + Math.min(i, length - numA));
-        }
-
-        // 총 이동 횟수 = 상하 이동 + 좌우 이동
-        return upDown + rightLeft;
+            
+        rightLeft = Math.min(rightLeft, i + name.length() - plusA + Math.min(i, name.length() - plusA));
+       } 
+        return answer = rightLeft+ upDown;
     }
 }
