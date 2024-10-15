@@ -14,7 +14,7 @@ class Solution {
         st.push(ch[0]);
         for (int i=1; i<ch.length; i++){
             
-            // 스택에 내용물이 있다면? , 마지막 종료조건
+            // 스택에 내용물이 있다면?
             if (delete ==k ) {
                 st.push(ch[i]);
                 continue;
